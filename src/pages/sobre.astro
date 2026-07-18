@@ -1,7 +1,5 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import profileImage from '../assets/perfil.webp';
 
 const principles = ['Escuta e compreensão', 'Funcionalidade', 'Estética', 'Conforto', 'Escolha consciente de materiais', 'Atenção aos detalhes', 'Soluções personalizadas'];
 const tools = ['AutoCAD', 'SketchUp', 'Enscape', 'Promob', 'Canva', 'Photoshop', 'Moodboards', 'Detalhamento técnico', 'Composição de ambientes', 'Estudo de iluminação'];
@@ -11,7 +9,7 @@ const tools = ['AutoCAD', 'SketchUp', 'Enscape', 'Promob', 'Canva', 'Photoshop',
   <section class="about-hero">
     <div class="shell about-hero__grid">
       <div class="about-hero__copy"><p class="eyebrow">Sobre Patricia</p><h1>Design que começa<br />pela <em>escuta.</em></h1><p class="lead">Acredito que um bom interior não impõe uma forma de viver. Ele acolhe, organiza e revela o que já é essencial para cada pessoa.</p></div>
-      <div class="about-hero__image"><Image src={profileImage} alt="Imagem provisória de profissional em um estúdio criativo" width={1000} widths={[500, 800, 1000]} sizes="(min-width: 900px) 50vw, 100vw" format="webp" loading="eager" /><span>Imagem provisória</span></div>
+      <div class="about-hero__image"><img src="/images/patricia/perfil.webp" alt="Imagem provisória de profissional em um estúdio criativo" width="1400" height="933" loading="eager" decoding="async" /><span>Imagem provisória</span></div>
     </div>
   </section>
 
@@ -39,4 +37,3 @@ const tools = ['AutoCAD', 'SketchUp', 'Enscape', 'Promob', 'Canva', 'Photoshop',
 
   <section class="simple-cta"><div class="shell"><p class="eyebrow">Vamos conversar?</p><h2>Quero conhecer a história do seu espaço.</h2><a class="button button--accent" href="/contato/">Entrar em contato</a></div></section>
 </BaseLayout>
-

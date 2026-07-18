@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import ProjectCard from '../components/ProjectCard.astro';
 import SectionTitle from '../components/SectionTitle.astro';
@@ -9,8 +8,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { services } from '../data/services';
 import { testimonials } from '../data/testimonials';
 import { siteConfig, whatsappUrl } from '../data/site';
-import heroImage from '../assets/hero.webp';
-import profileImage from '../assets/perfil.webp';
 
 const projects = (await getCollection('projetos')).sort((a, b) => a.data.ordem - b.data.ordem);
 const featuredProjects = projects.filter((project) => project.data.destaque).slice(0, 4);
@@ -20,7 +17,7 @@ const process = ['Primeiro contato', 'Briefing e levantamento', 'Estudo prelimin
 <BaseLayout>
   <section class="home-hero">
     <div class="home-hero__image" aria-hidden="true">
-      <Image src={heroImage} alt="" width={1800} widths={[800, 1200, 1800]} sizes="100vw" format="webp" loading="eager" fetchpriority="high" />
+      <img src="/images/projetos/sala-contemporanea.webp" alt="" width="1200" height="1800" loading="eager" fetchpriority="high" decoding="async" />
     </div>
     <div class="home-hero__veil"></div>
     <div class="shell home-hero__content">
@@ -51,7 +48,7 @@ const process = ['Primeiro contato', 'Briefing e levantamento', 'Estudo prelimin
   <section class="section about-preview" data-reveal>
     <div class="shell about-preview__grid">
       <div class="about-preview__image">
-        <Image src={profileImage} alt="Imagem provisória de profissional trabalhando em um estúdio criativo" width={1000} widths={[500, 800, 1000]} sizes="(min-width: 900px) 45vw, 100vw" format="webp" loading="lazy" />
+        <img src="/images/patricia/perfil.webp" alt="Imagem provisória de profissional trabalhando em um estúdio criativo" width="1400" height="933" loading="lazy" decoding="async" />
         <p class="image-note">Imagem provisória · substituir pelo retrato profissional de Patricia</p>
       </div>
       <div class="about-preview__content">
@@ -116,4 +113,3 @@ const process = ['Primeiro contato', 'Briefing e levantamento', 'Estudo prelimin
     </div>
   </section>
 </BaseLayout>
-
