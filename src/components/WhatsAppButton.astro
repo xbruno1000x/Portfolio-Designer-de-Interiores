@@ -1,14 +1,16 @@
 ---
-import { siteConfig, whatsappUrl } from '../data/site';
+import { whatsappUrl } from '../data/site';
+const whatsappHref = whatsappUrl();
 ---
 
-<a
-  class="whatsapp-float"
-  href={whatsappUrl()}
-  target={siteConfig.whatsapp ? '_blank' : undefined}
-  rel="noreferrer"
-  aria-label={siteConfig.whatsapp ? 'Conversar com Patricia pelo WhatsApp' : 'Ir para a página de contato'}
->
-  <span aria-hidden="true">WA</span>
-</a>
-
+{whatsappHref && (
+  <a
+    class="whatsapp-float"
+    href={whatsappHref}
+    target="_blank"
+    rel="noreferrer"
+    aria-label="Conversar com Patricia pelo WhatsApp"
+  >
+    <span aria-hidden="true">WA</span>
+  </a>
+)}

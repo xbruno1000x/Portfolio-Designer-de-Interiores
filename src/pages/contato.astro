@@ -2,6 +2,8 @@
 import ContactForm from '../components/ContactForm.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { siteConfig, whatsappUrl } from '../data/site';
+
+const whatsappHref = whatsappUrl();
 ---
 
 <BaseLayout title="Contato" description="Converse com Patricia de Souza Gonçalves sobre seu projeto de interiores e solicite um orçamento.">
@@ -9,14 +11,13 @@ import { siteConfig, whatsappUrl } from '../data/site';
     <div class="shell contact-hero__grid">
       <div><p class="eyebrow">Contato</p><h1>Conte sobre o espaço que você deseja <em>transformar.</em></h1><p class="lead">Toda boa transformação começa com uma conversa. Compartilhe seu momento, suas ideias e as necessidades do ambiente.</p></div>
       <aside class="contact-aside">
-        <div><span>01</span><h2>WhatsApp</h2><a href={whatsappUrl()} target={siteConfig.whatsapp ? '_blank' : undefined} rel="noreferrer">Iniciar conversa ↗</a></div>
-        <div><span>02</span><h2>E-mail</h2>{siteConfig.email ? <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> : <p>Configure em PUBLIC_CONTACT_EMAIL</p>}</div>
+        <div><span>01</span><h2>WhatsApp</h2>{whatsappHref ? <a href={whatsappHref} target="_blank" rel="noreferrer">Iniciar conversa ↗</a> : <p>Contato indisponível no momento</p>}</div>
+        <div><span>02</span><h2>E-mail</h2>{siteConfig.email ? <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> : <p>Contato indisponível no momento</p>}</div>
         <div><span>03</span><h2>Atendimento</h2><p>{siteConfig.region}</p></div>
-        <div><span>04</span><h2>Instagram</h2>{siteConfig.instagram ? <a href={siteConfig.instagram} target="_blank" rel="noreferrer">Acompanhar perfil ↗</a> : <p>Configure em PUBLIC_INSTAGRAM_URL</p>}</div>
+        <div><span>04</span><h2>Instagram</h2>{siteConfig.instagram ? <a href={siteConfig.instagram} target="_blank" rel="noreferrer">Acompanhar perfil ↗</a> : <p>Contato indisponível no momento</p>}</div>
       </aside>
     </div>
   </section>
 
   <section class="section contact-section" data-reveal><div class="shell"><div class="contact-form-heading"><p class="eyebrow">Solicite um orçamento</p><h2>Vamos começar?</h2><p>Preencha os campos abaixo. Quanto mais contexto você compartilhar, mais produtivo será nosso primeiro contato.</p></div><ContactForm /></div></section>
 </BaseLayout>
-

@@ -103,7 +103,7 @@ O schema completo e as validações estão em `src/content.config.ts`. A rota `/
 
 ## Trocar as imagens
 
-- Retrato provisório: substitua `src/assets/perfil.webp` e `public/images/patricia/perfil.webp`.
+- Retrato de Patricia: `src/assets/perfil.webp` e `public/images/patricia/perfil.webp`.
 - Imagem principal da home: substitua `src/assets/hero.webp`.
 - Capas e galerias: atualize os arquivos em `public/images/projetos/` e os caminhos nos Markdown.
 - Cartão de compartilhamento: substitua `public/og.png`.
@@ -138,9 +138,10 @@ Build output directory: dist
 Node version: 22
 ```
 
-5. Cadastre as variáveis `PUBLIC_*` em **Settings → Environment variables**.
-6. Publique o projeto.
-7. Depois de conectar um domínio, atualize `PUBLIC_SITE_URL`, a propriedade `site` em `astro.config.mjs` e o endereço do sitemap em `public/robots.txt`.
+5. Se o endereço publicado termina em `workers.dev`, cadastre as variáveis `PUBLIC_*` em **Settings → Build → Build variables and secrets**. Elas precisam existir durante o build do Astro; as variáveis de **Settings → Variables and Secrets** ficam disponíveis apenas em tempo de execução e não alteram o HTML estático.
+6. Se estiver usando um projeto Pages (`pages.dev`), cadastre as mesmas variáveis no ambiente **Production** em **Settings → Variables and Secrets**.
+7. Salve as variáveis e inicie um novo deploy; alterar uma variável não modifica um deploy já concluído.
+8. Depois de conectar um domínio, atualize `PUBLIC_SITE_URL`, a propriedade `site` em `astro.config.mjs` e o endereço do sitemap em `public/robots.txt`.
 
 Cada push na branch principal dispara um novo deploy. O projeto usa `output: 'static'`, compatível com o plano gratuito do Cloudflare Pages.
 

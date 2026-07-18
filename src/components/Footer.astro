@@ -1,6 +1,7 @@
 ---
 import { navigation, siteConfig, whatsappUrl } from '../data/site';
 const year = new Date().getFullYear();
+const whatsappHref = whatsappUrl();
 ---
 
 <footer class="site-footer">
@@ -21,7 +22,7 @@ const year = new Date().getFullYear();
     <div>
       <p class="footer-label">Contato</p>
       <div class="footer-links">
-        <a href={whatsappUrl()} target={siteConfig.whatsapp ? '_blank' : undefined} rel="noreferrer">WhatsApp</a>
+        {whatsappHref ? <a href={whatsappHref} target="_blank" rel="noreferrer">WhatsApp</a> : <a href="/contato/">WhatsApp</a>}
         {siteConfig.instagram ? <a href={siteConfig.instagram} target="_blank" rel="noreferrer">Instagram</a> : <a href="/contato/">Instagram</a>}
         {siteConfig.email ? <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> : <a href="/contato/">E-mail</a>}
       </div>
@@ -32,4 +33,3 @@ const year = new Date().getFullYear();
     <p>Desenvolvido com Astro.</p>
   </div>
 </footer>
-

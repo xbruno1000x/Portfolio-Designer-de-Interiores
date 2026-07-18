@@ -58,8 +58,15 @@ import { siteConfig } from '../data/site';
     const data = new FormData(form);
 
     if (!endpoint) {
+      if (!email) {
+        if (status) {
+          status.textContent = 'O envio por e-mail está temporariamente indisponível. Use um dos canais de contato acima.';
+          status.classList.add('is-error');
+        }
+        return;
+      }
       const body = Array.from(data.entries()).map(([key, value]) => `${key}: ${value}`).join('\n');
-      window.location.href = `mailto:${email || ''}?subject=${encodeURIComponent('Novo contato pelo portfólio')}&body=${encodeURIComponent(body)}`;
+      window.location.href = `mailto:${email}?subject=${encodeURIComponent('Novo contato pelo portfólio')}&body=${encodeURIComponent(body)}`;
       if (status) status.textContent = 'Seu aplicativo de e-mail será aberto para concluir o envio.';
       return;
     }
@@ -77,4 +84,3 @@ import { siteConfig } from '../data/site';
     }
   });
 </script>
-

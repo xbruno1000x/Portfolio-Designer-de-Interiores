@@ -17,6 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { project, previous, next } = Astro.props;
+const whatsappHref = whatsappUrl();
 const { Content } = await render(project);
 const data = project.data;
 ---
@@ -68,7 +69,6 @@ const data = project.data;
       {next ? <a href={`/portfolio/${next.data.slug}/`}><span>Próximo projeto</span><strong>{next.data.titulo} →</strong></a> : <span></span>}
     </nav>
 
-    <section class="project-cta"><div class="shell"><p class="eyebrow">Seu próximo espaço</p><h2>Gostou desta atmosfera?</h2><p>Vamos conversar sobre um projeto que faça sentido para sua rotina e sua história.</p><a class="button button--light" href={whatsappUrl()}>Solicitar orçamento</a></div></section>
+    <section class="project-cta"><div class="shell"><p class="eyebrow">Seu próximo espaço</p><h2>Gostou desta atmosfera?</h2><p>Vamos conversar sobre um projeto que faça sentido para sua rotina e sua história.</p><a class="button button--light" href={whatsappHref ?? '/contato/'}>Solicitar orçamento</a></div></section>
   </article>
 </BaseLayout>
-

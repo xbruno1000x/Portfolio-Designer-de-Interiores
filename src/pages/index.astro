@@ -7,11 +7,12 @@ import TestimonialCard from '../components/TestimonialCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { services } from '../data/services';
 import { testimonials } from '../data/testimonials';
-import { siteConfig, whatsappUrl } from '../data/site';
+import { whatsappUrl } from '../data/site';
 
 const projects = (await getCollection('projetos')).sort((a, b) => a.data.ordem - b.data.ordem);
 const featuredProjects = projects.filter((project) => project.data.destaque).slice(0, 4);
 const process = ['Primeiro contato', 'Briefing e levantamento', 'Estudo preliminar', 'Desenvolvimento do projeto', 'Apresentação', 'Entrega e acompanhamento'];
+const whatsappHref = whatsappUrl();
 ---
 
 <BaseLayout>
@@ -48,8 +49,7 @@ const process = ['Primeiro contato', 'Briefing e levantamento', 'Estudo prelimin
   <section class="section about-preview" data-reveal>
     <div class="shell about-preview__grid">
       <div class="about-preview__image">
-        <img src="/images/patricia/perfil.webp" alt="Imagem provisória de profissional trabalhando em um estúdio criativo" width="1400" height="933" loading="lazy" decoding="async" />
-        <p class="image-note">Imagem provisória · substituir pelo retrato profissional de Patricia</p>
+        <img src="/images/patricia/perfil.webp" alt="Retrato de Patricia de Souza Gonçalves" width="1200" height="1200" loading="lazy" decoding="async" />
       </div>
       <div class="about-preview__content">
         <p class="eyebrow">Sobre Patricia</p>
@@ -106,7 +106,7 @@ const process = ['Primeiro contato', 'Briefing e levantamento', 'Estudo prelimin
       <div class="final-cta__content">
         <p>Conte um pouco sobre o que você imagina. Vamos conversar sobre possibilidades, etapas e o melhor caminho para o seu projeto.</p>
         <div class="button-row">
-          <a class="button button--light" href={whatsappUrl()} target={siteConfig.whatsapp ? '_blank' : undefined} rel="noreferrer">Conversar no WhatsApp</a>
+          <a class="button button--light" href={whatsappHref ?? '/contato/'} target={whatsappHref ? '_blank' : undefined} rel="noreferrer">Conversar no WhatsApp</a>
           <a class="button button--ghost-light" href="/contato/">Enviar uma mensagem</a>
         </div>
       </div>
