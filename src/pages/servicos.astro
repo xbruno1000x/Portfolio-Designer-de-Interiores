@@ -1,0 +1,16 @@
+---
+import ServiceCard from '../components/ServiceCard.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { services } from '../data/services';
+---
+
+<BaseLayout title="Serviços" description="Conheça os serviços de design de interiores: projetos completos, consultoria, layout, visualização 3D e iluminação.">
+  <section class="page-hero page-hero--services"><div class="shell page-hero__grid"><div><p class="eyebrow">Serviços</p><h1>O suporte certo para<br /><em>cada transformação.</em></h1></div><p>Da orientação pontual ao projeto completo, cada serviço é adaptado ao momento, ao espaço e às decisões que você precisa tomar.</p></div></section>
+
+  <section class="section services-page">
+    <div class="shell services-page__list">{services.map((service) => <ServiceCard {service} />)}</div>
+  </section>
+
+  <section class="process-banner" data-reveal><div class="shell process-banner__grid"><div><p class="eyebrow">Não sabe por onde começar?</p><h2>Uma primeira conversa ajuda a identificar o melhor caminho.</h2></div><div><p>Você não precisa chegar com todas as respostas. Conte sobre o ambiente, as principais necessidades e o momento da obra. A partir disso, definimos juntos o formato mais adequado.</p><a class="button button--light" href="/contato/">Solicitar orçamento</a></div></div></section>
+</BaseLayout>
+

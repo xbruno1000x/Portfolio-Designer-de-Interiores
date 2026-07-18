@@ -1,0 +1,41 @@
+---
+interface Props {
+  project: {
+    titulo: string;
+    slug: string;
+    descricao: string;
+    categoria: string;
+    subcategoria: string;
+    ano: number;
+    capa: string;
+  };
+  featured?: boolean;
+  eager?: boolean;
+}
+
+const { project, featured = false, eager = false } = Astro.props;
+---
+
+<article class:list={['project-card', featured && 'project-card--featured']} data-project-card data-categories={`${project.categoria}|${project.subcategoria}`.toLowerCase()}>
+  <a class="project-card__image" href={`/portfolio/${project.slug}/`} aria-label={`Ver projeto ${project.titulo}`}>
+    <img
+      src={project.capa}
+      alt={`Ambiente do projeto ${project.titulo}`}
+      width="1200"
+      height="900"
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+      decoding="async"
+    />
+    <span class="project-card__view" aria-hidden="true">Ver projeto <span>↗</span></span>
+  </a>
+  <div class="project-card__content">
+    <div class="project-card__meta">
+      <span>{project.categoria} · {project.subcategoria}</span>
+      <span>{project.ano}</span>
+    </div>
+    <h3><a href={`/portfolio/${project.slug}/`}>{project.titulo}</a></h3>
+    <p>{project.descricao}</p>
+  </div>
+</article>
+

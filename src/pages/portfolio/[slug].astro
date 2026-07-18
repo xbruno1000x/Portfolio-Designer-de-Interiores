@@ -1,0 +1,74 @@
+---
+import { getCollection, render } from 'astro:content';
+import ProjectGallery from '../../components/ProjectGallery.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { whatsappUrl } from '../../data/site';
+
+export async function getStaticPaths() {
+  const projects = (await getCollection('projetos')).sort((a, b) => a.data.ordem - b.data.ordem);
+  return projects.map((project, index) => ({
+    params: { slug: project.data.slug },
+    props: {
+      project,
+      previous: index > 0 ? projects[index - 1] : null,
+      next: index < projects.length - 1 ? projects[index + 1] : null,
+    },
+  }));
+}
+
+const { project, previous, next } = Astro.props;
+const { Content } = await render(project);
+const data = project.data;
+---
+
+<BaseLayout title={data.titulo} description={data.descricao} image={data.capa} type="article">
+  <article class="project-detail">
+    <header class="project-detail__header shell">
+      <a class="back-link" href="/portfolio/">← Voltar ao portfólio</a>
+      <div class="project-detail__title">
+        <div><p class="eyebrow">{data.categoria} · {data.subcategoria}</p><h1>{data.titulo}</h1></div>
+        <p>{data.descricao}</p>
+      </div>
+      <dl class="project-meta">
+        <div><dt>Ano</dt><dd>{data.ano}</dd></div>
+        <div><dt>Local</dt><dd>{data.local}</dd></div>
+        <div><dt>Serviços</dt><dd>{data.servicos.join(', ')}</dd></div>
+      </dl>
+    </header>
+
+    <div class="project-cover">
+      <img src={data.capa} alt={`Imagem principal do projeto ${data.titulo}`} width="1800" height="1100" loading="eager" fetchpriority="high" />
+      {data.demonstracao && <span>Projeto demonstrativo</span>}
+    </div>
+
+    <section class="section project-story shell" data-reveal>
+      <div><p class="eyebrow">O projeto</p><h2>Um espaço guiado por sensações e escolhas conscientes.</h2></div>
+      <div class="project-story__text">
+        <h3>Conceito</h3><p>{data.conceito}</p>
+        <h3>Desafio</h3><p>{data.desafios}</p>
+        <h3>Soluções</h3><p>{data.solucoes}</p>
+      </div>
+    </section>
+
+    <section class="project-materials" data-reveal>
+      <div class="shell project-materials__grid">
+        <div><p class="eyebrow">Paleta tátil</p><h2>Materiais & cores</h2></div>
+        <ul>{data.materiais.map((material, index) => <li><span>{String(index + 1).padStart(2, '0')}</span>{material}</li>)}</ul>
+      </div>
+    </section>
+
+    <section class="section shell" data-reveal>
+      <div class="gallery-heading"><p class="eyebrow">Galeria</p><p>Selecione uma imagem para ampliar</p></div>
+      <ProjectGallery images={data.galeria} title={data.titulo} />
+      <div class="markdown-note"><Content /></div>
+    </section>
+
+    <nav class="project-navigation shell" aria-label="Navegação entre projetos">
+      {previous ? <a href={`/portfolio/${previous.data.slug}/`}><span>Projeto anterior</span><strong>← {previous.data.titulo}</strong></a> : <span></span>}
+      {next ? <a href={`/portfolio/${next.data.slug}/`}><span>Próximo projeto</span><strong>{next.data.titulo} →</strong></a> : <span></span>}
+    </nav>
+
+    <section class="project-cta"><div class="shell"><p class="eyebrow">Seu próximo espaço</p><h2>Gostou desta atmosfera?</h2><p>Vamos conversar sobre um projeto que faça sentido para sua rotina e sua história.</p><a class="button button--light" href={whatsappUrl()}>Solicitar orçamento</a></div></section>
+  </article>
+</BaseLayout>
+

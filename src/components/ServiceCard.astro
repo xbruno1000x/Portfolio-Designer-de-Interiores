@@ -1,0 +1,27 @@
+---
+import type { Service } from '../data/services';
+interface Props { service: Service; compact?: boolean }
+const { service, compact = false } = Astro.props;
+---
+
+<article class:list={['service-card', compact && 'service-card--compact']}>
+  <span class="service-card__number">{service.number}</span>
+  <h3>{service.name}</h3>
+  <p>{service.summary}</p>
+  {compact ? (
+    <a class="text-link" href="/servicos/">Conhecer serviço <span aria-hidden="true">↗</span></a>
+  ) : (
+    <>
+      <div class="service-card__details">
+        <h4>Para quem é indicado</h4>
+        <p>{service.audience}</p>
+        <h4>Possíveis entregáveis</h4>
+        <ul>{service.deliverables.map((item) => <li>{item}</li>)}</ul>
+        <h4>Etapas</h4>
+        <p>{service.steps.join(' · ')}</p>
+      </div>
+      <a class="button button--outline" href="/contato/">Solicitar orçamento</a>
+    </>
+  )}
+</article>
+

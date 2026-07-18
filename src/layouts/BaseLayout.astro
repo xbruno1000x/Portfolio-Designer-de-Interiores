@@ -1,0 +1,62 @@
+---
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import SEO from '../components/SEO.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { siteConfig } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const { title, description, image, type } = Astro.props;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: siteConfig.name,
+  description: siteConfig.description,
+  url: siteConfig.siteUrl,
+  areaServed: 'Brasil',
+  address: { '@type': 'PostalAddress', addressLocality: 'Nova Friburgo', addressRegion: 'RJ', addressCountry: 'BR' },
+  sameAs: siteConfig.instagram ? [siteConfig.instagram] : [],
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#f3efe7" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" href="/favicon.svg" />
+    <SEO {title} {description} {image} {type} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <Header />
+    <main id="conteudo"><slot /></main>
+    <Footer />
+    <WhatsAppButton />
+    <script>
+      const revealItems = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('reveal-ready');
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        revealItems.forEach((item) => observer.observe(item));
+      }
+    </script>
+  </body>
+</html>

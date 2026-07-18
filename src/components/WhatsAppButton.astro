@@ -1,0 +1,14 @@
+---
+import { siteConfig, whatsappUrl } from '../data/site';
+---
+
+<a
+  class="whatsapp-float"
+  href={whatsappUrl()}
+  target={siteConfig.whatsapp ? '_blank' : undefined}
+  rel="noreferrer"
+  aria-label={siteConfig.whatsapp ? 'Conversar com Patricia pelo WhatsApp' : 'Ir para a página de contato'}
+>
+  <span aria-hidden="true">WA</span>
+</a>
+

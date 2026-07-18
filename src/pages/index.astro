@@ -1,0 +1,119 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import ProjectCard from '../components/ProjectCard.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { services } from '../data/services';
+import { testimonials } from '../data/testimonials';
+import { siteConfig, whatsappUrl } from '../data/site';
+import heroImage from '../assets/hero.webp';
+import profileImage from '../assets/perfil.webp';
+
+const projects = (await getCollection('projetos')).sort((a, b) => a.data.ordem - b.data.ordem);
+const featuredProjects = projects.filter((project) => project.data.destaque).slice(0, 4);
+const process = ['Primeiro contato', 'Briefing e levantamento', 'Estudo preliminar', 'Desenvolvimento do projeto', 'Apresentação', 'Entrega e acompanhamento'];
+---
+
+<BaseLayout>
+  <section class="home-hero">
+    <div class="home-hero__image" aria-hidden="true">
+      <Image src={heroImage} alt="" width={1800} widths={[800, 1200, 1800]} sizes="100vw" format="webp" loading="eager" fetchpriority="high" />
+    </div>
+    <div class="home-hero__veil"></div>
+    <div class="shell home-hero__content">
+      <p class="eyebrow">Interiores · Nova Friburgo & online</p>
+      <p class="home-hero__signature">Patricia de Souza Gonçalves</p>
+      <h1>Ambientes pensados para <em>acolher</em>, inspirar e transformar.</h1>
+      <p class="home-hero__intro">Projetos de interiores que equilibram beleza, função e a história de quem vive cada espaço.</p>
+      <div class="button-row">
+        <a class="button button--light" href="/portfolio/">Conheça meu portfólio</a>
+        <a class="button button--ghost-light" href="/contato/">Solicite um orçamento</a>
+      </div>
+    </div>
+    <a class="home-hero__scroll" href="#projetos" aria-label="Ir para projetos em destaque"><span></span> Deslize para descobrir</a>
+  </section>
+
+  <section class="section projects-featured" id="projetos" data-reveal>
+    <div class="shell">
+      <div class="section-intro-row">
+        <SectionTitle eyebrow="Portfólio selecionado" title="Espaços com identidade, calma e intenção." text="Uma seleção de estudos demonstrativos que representa a linguagem visual e a organização preparada para os projetos reais." />
+        <a class="text-link text-link--large" href="/portfolio/">Ver todos os projetos <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="featured-grid">
+        {featuredProjects.map((project, index) => <ProjectCard project={project.data} featured={index === 0 || index === 3} eager={index === 0} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section about-preview" data-reveal>
+    <div class="shell about-preview__grid">
+      <div class="about-preview__image">
+        <Image src={profileImage} alt="Imagem provisória de profissional trabalhando em um estúdio criativo" width={1000} widths={[500, 800, 1000]} sizes="(min-width: 900px) 45vw, 100vw" format="webp" loading="lazy" />
+        <p class="image-note">Imagem provisória · substituir pelo retrato profissional de Patricia</p>
+      </div>
+      <div class="about-preview__content">
+        <p class="eyebrow">Sobre Patricia</p>
+        <h2>Escuta atenta. Olhar sensível. Soluções que fazem sentido.</h2>
+        <p class="lead">Patricia de Souza Gonçalves é designer de interiores, com olhar atento aos detalhes e paixão por criar espaços funcionais, acolhedores e visualmente harmoniosos.</p>
+        <p>Seu trabalho parte da personalidade, da rotina e das necessidades de cada cliente para transformar ambientes em experiências únicas — bonitas para ver, naturais para viver.</p>
+        <dl class="about-facts">
+          <div><dt>Formação</dt><dd>Design de Interiores</dd></div>
+          <div><dt>Base</dt><dd>Nova Friburgo, RJ</dd></div>
+          <div><dt>Atuação</dt><dd>Presencial & online</dd></div>
+        </dl>
+        <a class="button button--outline" href="/sobre/">Conheça minha trajetória</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section services-preview" data-reveal>
+    <div class="shell">
+      <SectionTitle eyebrow="Como posso ajudar" title="Do primeiro olhar ao último detalhe." text="Serviços desenhados para diferentes momentos, espaços e níveis de transformação." />
+      <div class="services-grid">
+        {services.slice(0, 4).map((service) => <ServiceCard {service} compact />)}
+      </div>
+      <div class="section-action"><a class="button button--outline" href="/servicos/">Explorar todos os serviços</a></div>
+    </div>
+  </section>
+
+  <section class="section process-section" data-reveal>
+    <div class="shell">
+      <div class="section-intro-row">
+        <SectionTitle eyebrow="Processo" title="Um percurso claro, construído em conjunto." text="Cada etapa organiza decisões, reduz dúvidas e aproxima o projeto do seu modo de viver." />
+        <p class="editorial-number" aria-hidden="true">06</p>
+      </div>
+      <ol class="process-list">
+        {process.map((step, index) => (
+          <li><span>{String(index + 1).padStart(2, '0')}</span><h3>{step}</h3><p>{index === 0 ? 'Uma conversa inicial para entender seu momento e suas expectativas.' : index === 1 ? 'Necessidades, medidas, referências e rotina ganham forma.' : index === 2 ? 'As primeiras soluções de layout, conceito e atmosfera são apresentadas.' : index === 3 ? 'Materiais, iluminação, mobiliário e detalhes são definidos.' : index === 4 ? 'O projeto é visualizado, alinhado e refinado com você.' : 'Você recebe o material final e as orientações para seguir com segurança.'}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section testimonials-section" data-reveal>
+    <div class="shell">
+      <SectionTitle eyebrow="Experiências" title="Projetos feitos para serem vividos." text="Depoimentos demonstrativos — esta área está pronta para receber relatos reais e autorizados de clientes." />
+      <div class="testimonials-grid">{testimonials.map((testimonial) => <TestimonialCard {testimonial} />)}</div>
+    </div>
+  </section>
+
+  <section class="final-cta" data-reveal>
+    <div class="shell final-cta__inner">
+      <div>
+        <p class="eyebrow">Seu espaço, sua história</p>
+        <h2>Vamos transformar<br />seu espaço?</h2>
+      </div>
+      <div class="final-cta__content">
+        <p>Conte um pouco sobre o que você imagina. Vamos conversar sobre possibilidades, etapas e o melhor caminho para o seu projeto.</p>
+        <div class="button-row">
+          <a class="button button--light" href={whatsappUrl()} target={siteConfig.whatsapp ? '_blank' : undefined} rel="noreferrer">Conversar no WhatsApp</a>
+          <a class="button button--ghost-light" href="/contato/">Enviar uma mensagem</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+

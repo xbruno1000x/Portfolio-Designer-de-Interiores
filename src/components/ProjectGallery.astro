@@ -1,0 +1,53 @@
+---
+interface Props { images: string[]; title: string }
+const { images, title } = Astro.props;
+---
+
+<div class="project-gallery" data-gallery>
+  {images.map((image, index) => (
+    <button class:list={['project-gallery__item', index === 0 && 'project-gallery__item--wide']} type="button" data-gallery-open={index} aria-label={`Ampliar imagem ${index + 1} do projeto ${title}`}>
+      <img src={image} alt={`Detalhe ${index + 1} do projeto ${title}`} width="1400" height="1000" loading="lazy" decoding="async" />
+      <span aria-hidden="true">Ampliar</span>
+    </button>
+  ))}
+
+  <dialog class="lightbox" data-lightbox aria-label={`Galeria ampliada do projeto ${title}`}>
+    <button class="lightbox__close" type="button" data-lightbox-close aria-label="Fechar imagem">Fechar ×</button>
+    <button class="lightbox__nav lightbox__nav--prev" type="button" data-lightbox-prev aria-label="Imagem anterior">←</button>
+    <figure>
+      <img src={images[0]} alt={`Imagem ampliada do projeto ${title}`} data-lightbox-image />
+      <figcaption data-lightbox-caption>1 / {images.length}</figcaption>
+    </figure>
+    <button class="lightbox__nav lightbox__nav--next" type="button" data-lightbox-next aria-label="Próxima imagem">→</button>
+  </dialog>
+</div>
+
+<script is:inline define:vars={{ images, title }}>
+  const gallery = document.querySelector('[data-gallery]');
+  const dialog = gallery?.querySelector('[data-lightbox]');
+  const lightboxImage = gallery?.querySelector('[data-lightbox-image]');
+  const caption = gallery?.querySelector('[data-lightbox-caption]');
+  let activeIndex = 0;
+
+  const showImage = (index) => {
+    activeIndex = (index + images.length) % images.length;
+    lightboxImage.src = images[activeIndex];
+    lightboxImage.alt = `Imagem ampliada ${activeIndex + 1} do projeto ${title}`;
+    caption.textContent = `${activeIndex + 1} / ${images.length}`;
+  };
+
+  gallery?.querySelectorAll('[data-gallery-open]').forEach((button) => {
+    button.addEventListener('click', () => {
+      showImage(Number(button.dataset.galleryOpen));
+      dialog?.showModal();
+    });
+  });
+  gallery?.querySelector('[data-lightbox-close]')?.addEventListener('click', () => dialog?.close());
+  gallery?.querySelector('[data-lightbox-prev]')?.addEventListener('click', () => showImage(activeIndex - 1));
+  gallery?.querySelector('[data-lightbox-next]')?.addEventListener('click', () => showImage(activeIndex + 1));
+  dialog?.addEventListener('click', (event) => event.target === dialog && dialog.close());
+  dialog?.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') showImage(activeIndex - 1);
+    if (event.key === 'ArrowRight') showImage(activeIndex + 1);
+  });
+</script>

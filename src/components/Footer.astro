@@ -1,0 +1,35 @@
+---
+import { navigation, siteConfig, whatsappUrl } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="shell site-footer__grid">
+    <div class="site-footer__brand">
+      <p class="eyebrow">Interiores com propósito</p>
+      <p class="site-footer__name">Patricia de Souza<br />Gonçalves</p>
+      <p>{siteConfig.profession} · {siteConfig.city}</p>
+    </div>
+
+    <div>
+      <p class="footer-label">Navegue</p>
+      <nav class="footer-links" aria-label="Navegação do rodapé">
+        {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
+      </nav>
+    </div>
+
+    <div>
+      <p class="footer-label">Contato</p>
+      <div class="footer-links">
+        <a href={whatsappUrl()} target={siteConfig.whatsapp ? '_blank' : undefined} rel="noreferrer">WhatsApp</a>
+        {siteConfig.instagram ? <a href={siteConfig.instagram} target="_blank" rel="noreferrer">Instagram</a> : <a href="/contato/">Instagram</a>}
+        {siteConfig.email ? <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> : <a href="/contato/">E-mail</a>}
+      </div>
+    </div>
+  </div>
+  <div class="shell site-footer__bottom">
+    <p>© {year} {siteConfig.name}. Todos os direitos reservados.</p>
+    <p>Desenvolvido com Astro.</p>
+  </div>
+</footer>
+

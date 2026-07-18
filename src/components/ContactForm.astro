@@ -1,0 +1,80 @@
+---
+import { siteConfig } from '../data/site';
+---
+
+<form class="contact-form" data-contact-form data-endpoint={siteConfig.formEndpoint} data-email={siteConfig.email} novalidate>
+  <div class="form-grid">
+    <label>Nome <input type="text" name="name" autocomplete="name" required /></label>
+    <label>WhatsApp <input type="tel" name="whatsapp" autocomplete="tel" required /></label>
+    <label>E-mail <input type="email" name="email" autocomplete="email" required /></label>
+    <label>Cidade <input type="text" name="city" autocomplete="address-level2" required /></label>
+    <label>Tipo de ambiente
+      <select name="environment" required>
+        <option value="">Selecione</option><option>Sala</option><option>Cozinha</option><option>Quarto</option><option>Banheiro</option><option>Escritório</option><option>Imóvel completo</option><option>Outro</option>
+      </select>
+    </label>
+    <label>Tipo de serviço
+      <select name="service" required>
+        <option value="">Selecione</option><option>Projeto completo</option><option>Consultoria</option><option>Projeto de ambiente</option><option>Layout e circulação</option><option>Visualização 3D</option><option>Iluminação</option>
+      </select>
+    </label>
+    <label>Área aproximada <input type="text" name="area" placeholder="Ex.: 35 m²" /></label>
+    <label>Faixa de orçamento
+      <select name="budget">
+        <option value="">Prefiro conversar</option><option>Até R$ 10 mil</option><option>R$ 10 a 30 mil</option><option>R$ 30 a 60 mil</option><option>Acima de R$ 60 mil</option>
+      </select>
+    </label>
+    <label>Prazo desejado <input type="text" name="timeline" placeholder="Ex.: iniciar em 3 meses" /></label>
+    <label class="form-grid__full">Mensagem <textarea name="message" rows="6" required placeholder="Conte um pouco sobre o espaço e o que você deseja transformar."></textarea></label>
+  </div>
+  <input type="hidden" name="subject" value="Novo contato pelo portfólio" />
+  <div class="contact-form__footer">
+    <p>Ao enviar, você concorda em receber um retorno sobre esta solicitação.</p>
+    <button class="button button--accent" type="submit">Enviar mensagem</button>
+  </div>
+  <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const status = form?.querySelector<HTMLElement>('[data-form-status]');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    status?.classList.remove('is-error', 'is-success');
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      if (status) {
+        status.textContent = 'Revise os campos obrigatórios antes de enviar.';
+        status.classList.add('is-error');
+      }
+      return;
+    }
+
+    const endpoint = form.dataset.endpoint;
+    const email = form.dataset.email;
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const data = new FormData(form);
+
+    if (!endpoint) {
+      const body = Array.from(data.entries()).map(([key, value]) => `${key}: ${value}`).join('\n');
+      window.location.href = `mailto:${email || ''}?subject=${encodeURIComponent('Novo contato pelo portfólio')}&body=${encodeURIComponent(body)}`;
+      if (status) status.textContent = 'Seu aplicativo de e-mail será aberto para concluir o envio.';
+      return;
+    }
+
+    try {
+      if (submit) { submit.disabled = true; submit.textContent = 'Enviando…'; }
+      const response = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+      if (!response.ok) throw new Error('Falha no envio');
+      form.reset();
+      if (status) { status.textContent = 'Mensagem enviada com sucesso. Patricia retornará em breve.'; status.classList.add('is-success'); }
+    } catch {
+      if (status) { status.textContent = 'Não foi possível enviar agora. Tente novamente ou use o WhatsApp.'; status.classList.add('is-error'); }
+    } finally {
+      if (submit) { submit.disabled = false; submit.textContent = 'Enviar mensagem'; }
+    }
+  });
+</script>
+

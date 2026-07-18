@@ -1,0 +1,57 @@
+---
+import { navigation, siteConfig } from '../data/site';
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
+const darkStart = pathname === '/' || pathname === '/portfolio/' || pathname === '/servicos/' || pathname === '/contato/';
+---
+
+<header class:list={['site-header', !darkStart && 'site-header--on-light']} data-header>
+  <div class="site-header__inner shell">
+    <a class="brand" href="/" aria-label={`${siteConfig.name}, página inicial`}>
+      <span class="brand__name">Patricia de Souza</span>
+      <span class="brand__role">Designer de Interiores</span>
+    </a>
+
+    <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="main-navigation" data-menu-toggle>
+      <span></span><span></span>
+    </button>
+
+    <nav class="site-nav" id="main-navigation" aria-label="Navegação principal" data-nav>
+      <div class="site-nav__links">
+        {navigation.map((item) => (
+          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+        ))}
+      </div>
+      <a class="button button--small button--accent" href="/contato/">Solicitar orçamento</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const button = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+
+  const closeMenu = () => {
+    button?.setAttribute('aria-expanded', 'false');
+    button?.setAttribute('aria-label', 'Abrir menu');
+    nav?.classList.remove('is-open');
+    document.body.classList.remove('menu-open');
+  };
+
+  button?.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!open));
+    button.setAttribute('aria-label', open ? 'Abrir menu' : 'Fechar menu');
+    nav?.classList.toggle('is-open', !open);
+    document.body.classList.toggle('menu-open', !open);
+  });
+
+  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  window.addEventListener('resize', () => window.innerWidth >= 960 && closeMenu());
+
+  const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 24);
+  updateHeader();
+  window.addEventListener('scroll', updateHeader, { passive: true });
+</script>

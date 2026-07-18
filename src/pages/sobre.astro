@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import profileImage from '../assets/perfil.webp';
+
+const principles = ['Escuta e compreensão', 'Funcionalidade', 'Estética', 'Conforto', 'Escolha consciente de materiais', 'Atenção aos detalhes', 'Soluções personalizadas'];
+const tools = ['AutoCAD', 'SketchUp', 'Enscape', 'Promob', 'Canva', 'Photoshop', 'Moodboards', 'Detalhamento técnico', 'Composição de ambientes', 'Estudo de iluminação'];
+---
+
+<BaseLayout title="Sobre" description="Conheça a trajetória, a abordagem e os princípios de trabalho de Patricia de Souza Gonçalves, designer de interiores.">
+  <section class="about-hero">
+    <div class="shell about-hero__grid">
+      <div class="about-hero__copy"><p class="eyebrow">Sobre Patricia</p><h1>Design que começa<br />pela <em>escuta.</em></h1><p class="lead">Acredito que um bom interior não impõe uma forma de viver. Ele acolhe, organiza e revela o que já é essencial para cada pessoa.</p></div>
+      <div class="about-hero__image"><Image src={profileImage} alt="Imagem provisória de profissional em um estúdio criativo" width={1000} widths={[500, 800, 1000]} sizes="(min-width: 900px) 50vw, 100vw" format="webp" loading="eager" /><span>Imagem provisória</span></div>
+    </div>
+  </section>
+
+  <section class="section about-story" data-reveal>
+    <div class="shell about-story__grid">
+      <p class="editorial-number">01</p>
+      <div><p class="eyebrow">Trajetória</p><h2>Curiosidade, técnica e sensibilidade em constante construção.</h2></div>
+      <div class="prose"><p>Patricia de Souza Gonçalves é formada em Design de Interiores e encontra na observação do cotidiano o ponto de partida para cada projeto. Seu olhar se volta às relações entre luz, matéria, escala e bem-estar.</p><p>Esta apresentação é provisória e foi preparada para ser facilmente atualizada com sua formação, experiências, cursos e marcos profissionais reais.</p><p>Mais do que compor ambientes, seu objetivo é criar bases para uma rotina mais fluida, confortável e conectada à personalidade de quem habita.</p></div>
+    </div>
+  </section>
+
+  <section class="section approach-section" data-reveal>
+    <div class="shell">
+      <div class="section-intro-row"><div><p class="eyebrow">Minha abordagem</p><h2>Beleza e função,<br />sem excessos.</h2></div><p>Projetos autorais nascem de decisões claras e de uma leitura cuidadosa do contexto. Estes são os princípios que orientam o processo.</p></div>
+      <ol class="principles-grid">{principles.map((principle, index) => <li><span>{String(index + 1).padStart(2, '0')}</span><h3>{principle}</h3></li>)}</ol>
+    </div>
+  </section>
+
+  <section class="section knowledge-section" data-reveal>
+    <div class="shell knowledge-section__grid">
+      <div><p class="eyebrow">Ferramentas & conhecimentos</p><h2>Recursos que apoiam cada etapa.</h2><p>Lista provisória para edição conforme a experiência real de Patricia. Os itens não representam declaração definitiva de domínio.</p></div>
+      <ul>{tools.map((tool) => <li>{tool}<span aria-hidden="true">↗</span></li>)}</ul>
+    </div>
+  </section>
+
+  <section class="simple-cta"><div class="shell"><p class="eyebrow">Vamos conversar?</p><h2>Quero conhecer a história do seu espaço.</h2><a class="button button--accent" href="/contato/">Entrar em contato</a></div></section>
+</BaseLayout>
+

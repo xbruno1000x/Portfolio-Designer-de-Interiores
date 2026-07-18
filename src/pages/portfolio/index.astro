@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectCard from '../../components/ProjectCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const projects = (await getCollection('projetos')).sort((a, b) => a.data.ordem - b.data.ordem);
+const filters = ['Todos', 'Residencial', 'Comercial', 'Sala', 'Cozinha', 'Quarto', 'Banheiro', 'Projeto acadêmico', 'Visualização 3D'];
+---
+
+<BaseLayout title="Portfólio" description="Conheça os projetos de interiores de Patricia de Souza Gonçalves: espaços residenciais, comerciais e estudos de visualização 3D.">
+  <section class="page-hero page-hero--portfolio">
+    <div class="shell page-hero__grid">
+      <div><p class="eyebrow">Portfólio</p><h1>Espaços que revelam<br /><em>quem vive neles.</em></h1></div>
+      <p>Uma curadoria de projetos e estudos que explora proporção, materialidade, luz e maneiras mais naturais de habitar.</p>
+    </div>
+  </section>
+
+  <section class="section portfolio-section">
+    <div class="shell">
+      <div class="filter-bar" role="group" aria-label="Filtrar projetos por categoria" data-filters>
+        {filters.map((filter, index) => <button type="button" class={index === 0 ? 'is-active' : ''} data-filter={filter.toLowerCase()} aria-pressed={index === 0 ? 'true' : 'false'}>{filter}</button>)}
+      </div>
+      <p class="portfolio-count" data-count>{projects.length} projetos</p>
+      <div class="portfolio-grid" data-projects>
+        {projects.map((project) => <ProjectCard project={project.data} />)}
+      </div>
+      <p class="empty-state" data-empty hidden>Nenhum projeto demonstrativo nesta categoria ainda.</p>
+      <p class="content-note">Os projetos exibidos são conteúdos demonstrativos. Substitua os arquivos em <code>src/content/projetos/</code> e as imagens pelos trabalhos reais.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-project-card]');
+  const count = document.querySelector<HTMLElement>('[data-count]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+
+  buttons.forEach((button) => button.addEventListener('click', () => {
+    const filter = button.dataset.filter || 'todos';
+    let visible = 0;
+    buttons.forEach((item) => {
+      const active = item === button;
+      item.classList.toggle('is-active', active);
+      item.setAttribute('aria-pressed', String(active));
+    });
+    cards.forEach((card) => {
+      const show = filter === 'todos' || (card.dataset.categories || '').split('|').includes(filter);
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+    if (count) count.textContent = `${visible} ${visible === 1 ? 'projeto' : 'projetos'}`;
+    if (empty) empty.hidden = visible > 0;
+  }));
+</script>
+

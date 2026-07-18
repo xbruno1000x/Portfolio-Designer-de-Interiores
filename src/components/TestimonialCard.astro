@@ -1,0 +1,14 @@
+---
+interface Props { testimonial: { quote: string; name: string; project: string } }
+const { testimonial } = Astro.props;
+---
+
+<blockquote class="testimonial-card">
+  <span class="testimonial-card__mark" aria-hidden="true">“</span>
+  <p>{testimonial.quote}</p>
+  <footer>
+    <cite>{testimonial.name}</cite>
+    <span>{testimonial.project}</span>
+  </footer>
+</blockquote>
+
