@@ -140,6 +140,8 @@ CLOUDFLARE_ACCOUNT_ID
 CLOUDFLARE_API_TOKEN
 ```
 
+Também são aceitos os aliases `CF_ACCOUNT_ID` e `CF_API_TOKEN`, caso esses nomes já estejam em uso no repositório.
+
 O token do Cloudflare precisa da permissão **Edit Cloudflare Workers** e deve ser limitado à conta usada pelo projeto. O Account ID está disponível na visão geral da conta no Cloudflare.
 
 O arquivo `.github/workflows/deploy-cloudflare.yml` valida os três contatos obrigatórios, executa o build e publica a pasta `dist` no Worker `portfolio-designer`. Cada push em `main` inicia uma publicação; também é possível usar **GitHub → Actions → Publicar portfolio no Cloudflare → Run workflow**.
