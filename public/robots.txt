@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://patricadesouza.com.br/sitemap-index.xml
-

@@ -1,0 +1,57 @@
+name: Publicar portfolio no Cloudflare
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-production
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build e deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL || 'https://portfolio-designer.bruno-faria.workers.dev' }}
+      PUBLIC_WHATSAPP_NUMBER: ${{ secrets.PUBLIC_WHATSAPP_NUMBER }}
+      PUBLIC_INSTAGRAM_URL: ${{ secrets.PUBLIC_INSTAGRAM_URL }}
+      PUBLIC_CONTACT_EMAIL: ${{ secrets.PUBLIC_CONTACT_EMAIL }}
+      PUBLIC_FORM_ENDPOINT: ${{ secrets.PUBLIC_FORM_ENDPOINT }}
+
+    steps:
+      - name: Baixar o projeto
+        uses: actions/checkout@v6
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Validar contatos configurados
+        shell: bash
+        run: |
+          if [ -z "$PUBLIC_WHATSAPP_NUMBER" ] || [ -z "$PUBLIC_INSTAGRAM_URL" ] || [ -z "$PUBLIC_CONTACT_EMAIL" ]; then
+            echo "::error::Cadastre PUBLIC_WHATSAPP_NUMBER, PUBLIC_INSTAGRAM_URL e PUBLIC_CONTACT_EMAIL nos secrets do repositório."
+            exit 1
+          fi
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Gerar o site com os contatos
+        run: npm run build
+
+      - name: Publicar no Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4"
+          command: deploy

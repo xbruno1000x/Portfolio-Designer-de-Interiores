@@ -124,26 +124,27 @@ git push -u origin main
 
 Não envie `.env`, chaves ou dados privados.
 
-## Deploy gratuito no Cloudflare Pages
+## Deploy no Cloudflare Workers pelo GitHub
 
-1. Entre no painel do Cloudflare e abra **Workers & Pages**.
-2. Escolha **Create application → Pages → Connect to Git**.
-3. Autorize o GitHub e selecione o repositório.
-4. Configure:
+O site é estático. Por isso, os dados `PUBLIC_*` são inseridos durante o build executado pelo GitHub Actions e não como variáveis de execução do Worker.
+
+Em **GitHub → Settings → Secrets and variables → Actions → Repository secrets**, cadastre:
 
 ```text
-Framework preset: Astro
-Build command: npm run build
-Build output directory: dist
-Node version: 22
+PUBLIC_WHATSAPP_NUMBER
+PUBLIC_INSTAGRAM_URL
+PUBLIC_CONTACT_EMAIL
+PUBLIC_FORM_ENDPOINT        # opcional
+PUBLIC_SITE_URL             # opcional enquanto usar workers.dev
+CLOUDFLARE_ACCOUNT_ID
+CLOUDFLARE_API_TOKEN
 ```
 
-5. Se o endereço publicado termina em `workers.dev`, cadastre as variáveis `PUBLIC_*` em **Settings → Build → Build variables and secrets**. Elas precisam existir durante o build do Astro; as variáveis de **Settings → Variables and Secrets** ficam disponíveis apenas em tempo de execução e não alteram o HTML estático.
-6. Se estiver usando um projeto Pages (`pages.dev`), cadastre as mesmas variáveis no ambiente **Production** em **Settings → Variables and Secrets**.
-7. Salve as variáveis e inicie um novo deploy; alterar uma variável não modifica um deploy já concluído.
-8. Depois de conectar um domínio, atualize `PUBLIC_SITE_URL`, a propriedade `site` em `astro.config.mjs` e o endereço do sitemap em `public/robots.txt`.
+O token do Cloudflare precisa da permissão **Edit Cloudflare Workers** e deve ser limitado à conta usada pelo projeto. O Account ID está disponível na visão geral da conta no Cloudflare.
 
-Cada push na branch principal dispara um novo deploy. O projeto usa `output: 'static'`, compatível com o plano gratuito do Cloudflare Pages.
+O arquivo `.github/workflows/deploy-cloudflare.yml` valida os três contatos obrigatórios, executa o build e publica a pasta `dist` no Worker `portfolio-designer`. Cada push em `main` inicia uma publicação; também é possível usar **GitHub → Actions → Publicar portfolio no Cloudflare → Run workflow**.
+
+Os contatos são públicos por natureza: após o build, telefone, Instagram, e-mail e endpoint do formulário podem ser vistos no HTML pelo visitante. Os secrets evitam apenas que esses valores fiquem gravados no repositório.
 
 ## Estrutura principal
 
